@@ -1,0 +1,11 @@
+pipeline{
+    agent any
+    stages {
+        stage('Valida') {
+            steps {
+                sh 'eho "Validando..."'
+                sh 'pwd'
+            }
+        }
+    }
+}

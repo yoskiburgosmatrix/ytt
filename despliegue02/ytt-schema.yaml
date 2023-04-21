@@ -1,0 +1,28 @@
+#@data/values-schema
+---
+grupo: ""
+servicio: ""
+namespace: ""
+replicas: 1
+containerPort: 8080
+
+volumes:
+- name: ""
+  defaultMode: 420
+  secretName: "-secret-jks"
+
+volumeMounts:
+- mountPath: ""
+  name:  ""
+  readOnly: true
+  subPath: ""
+
+resources:
+  fact_memory: 64
+  fact_cpu: 50
+
+tipoapp: "net"
+
+items:
+- key: ""
+  path: ""

@@ -1,0 +1,28 @@
+#@data/values
+---
+grupo: "onebank"
+servicio: "-cross-services-biometric-api"
+namespace: "-integration-ns"
+
+volumes:
+- name: "-key-pas-volume"
+- name:  "-key-bio-volume"
+
+volumeMounts:
+- mountPath: /encryptor/passport/bis-store.jceks
+  name:  "-key-pas-volume"
+  subPath: bis-store.jceks
+- mountPath: /encryptor/bio/bio-store.jceks
+  name:  "-key-bio-volume"
+  subPath: bio-store.jceks
+
+ports:
+- name: http
+- name: https
+  port: 443
+  targetPort: 8443
+
+names:
+  deploy: "-dpy"
+  service: "-svc"
+  config: "-properties-configmap"

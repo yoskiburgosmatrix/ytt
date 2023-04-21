@@ -1,0 +1,100 @@
+#@ load("@ytt:data", "data")
+#@ load("common.lib.yaml", "recursos", "nombre")
+
+#@ def items():
+- key: bis-store.jceks
+  path: bis-store.jceks
+#@ end
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ nombre(data.values.names.deploy)
+  namespace: #@ data.values.grupo + data.values.namespace
+  labels:
+    platform: #@ data.values.grupo
+    layer: services
+    app: #@ data.values.grupo + data.values.servicio
+spec:
+  replicas: #@ data.values.replicas
+  selector:
+    matchLabels:
+      platform: #@ data.values.grupo
+      layer: services
+      app: #@ data.values.grupo + data.values.servicio
+  template:
+    metadata:
+      namespace: #@ data.values.grupo + data.values.namespace
+      labels:
+        platform: #@ data.values.grupo
+        layer: services
+        app: #@ data.values.grupo + data.values.servicio
+    spec:
+      containers:
+      - name: #@ data.values.grupo + data.values.servicio + "-ctr"
+        image: northamerica-northeast2-docker.pkg.dev/nbrna-0109-anthosperu-cfc55dcf/pe-artifacts/backend/java/VARIABLE_COMMIT
+        resources: #@ recursos(data.values.tipoapp)
+        imagePullPolicy: Always
+        ports:
+          - containerPort: #@ data.values.containerPort
+        envFrom:
+          - configMapRef:
+              name: #@ data.values.grupo + data.values.servicio + "-properties-configmap"
+          - secretRef:   
+              name: #@ data.values.grupo + data.values.servicio + "-secret"
+        volumeMounts:
+        #@ for/end dato in data.values.volumeMounts:
+        - mountPath: #@ dato.mountPath
+          name: #@ nombre(dato.name)
+          readOnly: #@ dato.readOnly
+          subPath:  #@ dato.subPath
+      imagePullSecrets: 
+      - name: image-pull-secret-nbrna-0109-anthosperu
+      volumes:
+      #@ for/end dato in data.values.volumes:
+      - secret:
+          defaultMode: #@ dato.defaultMode
+          secretName: #@ nombre(dato.secretName) 
+          items: #@ items()
+          name: #@ nombre(dato.name)
+         
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ nombre(data.values.names.service)
+  namespace: #@ data.values.grupo + data.values.namespace
+spec:
+  type: ClusterIP
+  selector:
+    app: #@ nombre("")
+  ports:
+  #@ for/end dato in data.values.ports:
+    - name: #@ dato.name
+      port: #@ dato.port
+      targetPort: #@ dato.targetPort
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ nombre(data.values.names.config)
+  namespace: #@ data.values.grupo + data.values.namespace
+data:
+  SPRING_PROFILES_ACTIVE: "production"
+  SPRING_DATASOURCE_URL: "jdbc:sqlserver://LSDatTPRD.per.bns:275;databaseName=ONEBANKINTEGRATION;trustServerCertificate=true"  
+  SPRING_DATASOURCE_DRIVER-CLASS-NAME: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+  PASSPORT_BASE_URL: "https://passport-oauth.apps.cloud.bns/"
+  BIOMETRICS_URL: "https://biometriape.per.bns:9443"
+  BIOMETRICS_CONNECTTIMEOUT: "10000"
+  BIOMETRICS_READTIMEOUT: "60000"
+  PASSPORT_CERT_SERVENAME: "passport-oauth.apps.cloud.bns"
+  PASSPORT_CERT_URL: "passport-oauth.apps.cloud.bns:443"
+  BIOMETRICS_CERT_SERVENAME: "biometriape.per.bns"
+  BIOMETRICS_CERT_URL: "biometriape.per.bns:9443"
+  TZ: "America/Lima"
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_EXCLUDE: "env,beans,conditions,configprops,info,metrics,loggers,heapdump,features"
+  DT_CUSTOM_PROP: "UNIQUE_ID=PER_Onebank_Retail EPM=BHD8"       
+         

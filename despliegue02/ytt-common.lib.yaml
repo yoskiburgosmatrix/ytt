@@ -1,0 +1,56 @@
+#@ load("@ytt:data", "data")
+
+#@ def nombre(sub):
+#@   return data.values.grupo + data.values.servicio + sub
+#@ end
+
+#@ def tipoapp(t):
+#@   factorcpu = data.values.resources.fact_cpu
+#@  if t == "java":
+#@   factormem = data.values.resources.fact_memory*2
+#@   return { "cpu": 10*factorcpu, "memory": 4*factormem }
+#@  else:
+#@   if t == "net":
+#@     factormem = data.values.resources.fact_memory*2
+#@     return { "cpu": 5*factorcpu, "memory": 6*factormem }
+#@   else:
+#@     factormem = data.values.resources.fact_memory
+#@     return { "cpu": 2*factorcpu, "memory": 2*factormem }
+#@   end
+#@  end
+#@ end
+
+#@ def base(t):
+#@  factormem = data.values.resources.fact_memory
+#@  factorcpu = data.values.resources.fact_cpu
+#@  if t == "java":
+#@   return { "cpu": factorcpu, "memory": factormem*2 }
+#@  else:
+#@   if t == "net":
+#@     return { "cpu": factorcpu, "memory": factormem*2 }
+#@   else:
+#@     return { "cpu": factorcpu, "memory": factormem }
+#@   end
+#@  end
+#@ end
+
+#@ def cpus(n):
+#@   return str(n)+"m"
+#@ end
+
+#@ def memorys(n):
+#@   return "{}Mi".format(n)
+#@ end
+
+#@ def recursos(tipo):
+#@   initial = base(tipo)
+#@   final = tipoapp(tipo)
+requests:
+  cpu: #@ cpus(initial["cpu"])
+  memory: #@ memorys(initial["memory"])
+limits:
+  cpu: #@ cpus(final["cpu"])
+  memory: #@ memorys(final["memory"])
+#@ end
+
+

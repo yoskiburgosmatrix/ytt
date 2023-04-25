@@ -1,5 +1,5 @@
 #@ load("@ytt:data", "data")
-#@ load("common.lib.yaml", "recursos", "nombre")
+#@ load("ytt-common.lib.yaml", "recursos", "nombre")
 
 #@ def items():
 - key: bis-store.jceks

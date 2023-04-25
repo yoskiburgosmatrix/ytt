@@ -26,3 +26,13 @@ tipoapp: "net"
 items:
 - key: ""
   path: ""
+
+ports:
+- name: http
+  port: 8080
+  targetPort: 8080
+  
+names:
+  deploy: ""
+  service: ""
+  config: ""

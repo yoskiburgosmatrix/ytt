@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        IMAGEN = "yoskidavid00/myapp"
+        IMAGEN = "yoskidavid/myapp"
         USUARIO = 'USER_DOCKERHUB'
     }
     agent any
@@ -14,8 +14,8 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    //newApp = docker.build "$IMAGEN:$BUILD_NUMBER"
-                     newApp = docker.build "debian"
+                    newApp = docker.build "$IMAGEN:$BUILD_NUMBER"
+                    // newApp = docker.build "debian"
                 }
             }
         }

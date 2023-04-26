@@ -28,7 +28,7 @@ pipeline {
             }
         }
         
-       0/* stage('Deploy') {
+       /* stage('Deploy') {
             steps {
                 script {
                     docker.withRegistry( '', USUARIO ) {

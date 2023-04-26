@@ -7,6 +7,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
+                sh 'docker version'
                 git branch: "main", url: 'https://github.com/yoskiburgosmatrix/ytt.git'
             }
         }

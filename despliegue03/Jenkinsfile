@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        IMAGEN = "yoskidavid/myapp"
+        IMAGEN = "ybpytt"
         USUARIO = 'USER_DOCKERHUB'
     }
     agent any

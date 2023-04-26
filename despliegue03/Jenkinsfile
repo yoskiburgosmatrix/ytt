@@ -10,7 +10,7 @@ pipeline {
                 git branch: "main", url: 'https://github.com/yoskiburgosmatrix/ytt.git'
             }
         }
-         /* 
+         
         stage('Build') {
             steps {
                 script {
@@ -19,6 +19,7 @@ pipeline {
             }
         }
 
+        /* 
         stage('Test') {
             steps {
                 script {

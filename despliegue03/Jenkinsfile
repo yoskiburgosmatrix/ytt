@@ -3,9 +3,10 @@ pipeline {
         IMAGEN = "ybpytt"
         USUARIO = 'USER_DOCKERHUB'
     }
-    agent any
+    agent none
     stages {
         stage('Clone') {
+            agent any
             steps {
                 sh 'docker version'
                 git branch: "main", url: 'https://github.com/yoskiburgosmatrix/ytt.git'
@@ -13,6 +14,7 @@ pipeline {
         }
          
         stage('Build') {
+            agent any
             steps {
                 script {
                     newApp = docker.build "$IMAGEN:$BUILD_NUMBER"
